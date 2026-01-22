@@ -14,6 +14,11 @@ const ChatbotPage = () => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [conversationContext, setConversationContext] = useState({
+    topic: null,
+    mood: null,
+    previousTopics: []
+  });
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -95,40 +100,130 @@ const ChatbotPage = () => {
 
   const getBotResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
+    const words = lowerMessage.split(/\s+/);
+    const messageLength = words.length;
     
-    // Greetings
-    if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-      return "Hello! I'm here to support your mental health journey. How are you feeling today? 🌿";
+    // Update conversation context
+    let newContext = { ...conversationContext };
+    
+    // Greetings - More varied and natural
+    if (lowerMessage.match(/^(hi|hello|hey|greetings|good morning|good afternoon|good evening)/i)) {
+      const greetings = [
+        "Hello! It's great to hear from you. How are you doing today? 🌿",
+        "Hi there! I'm here to listen and support you. What's on your mind?",
+        "Hey! Welcome back. How can I help you feel better today?",
+        "Hello! I'm glad you're here. How are you feeling right now?",
+        "Hi! It's wonderful to connect with you. What would you like to talk about?"
+      ];
+      return greetings[Math.floor(Math.random() * greetings.length)];
     }
     
-    // Anxiety responses
-    if (lowerMessage.includes('anxiety') || lowerMessage.includes('anxious') || lowerMessage.includes('panic') || lowerMessage.includes('worried') || lowerMessage.includes('nervous')) {
-      return "I understand you're feeling anxious. Here are some helpful techniques:\n\n🧘 **Immediate Relief:**\n• 4-7-8 breathing: Inhale 4, hold 7, exhale 8\n• Grounding technique: Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste\n• Progressive muscle relaxation\n\n🌱 **Daily Practices:**\n• Regular exercise (even a 10-minute walk)\n• Limit caffeine and alcohol\n• Practice mindfulness meditation\n• Maintain a consistent sleep schedule\n\n💊 **Natural Remedies:**\n• Chamomile tea or supplements\n• Lavender essential oil\n• Magnesium supplements (consult doctor first)\n• Omega-3 fatty acids\n\n⚠️ **When to Seek Help:** If anxiety significantly impacts daily life, consider talking to a mental health professional.";
+    // Anxiety responses - More conversational and varied
+    if (lowerMessage.match(/\b(anxiety|anxious|panic|worried|worries|nervous|nervousness|overwhelmed|stressed|stressful)\b/)) {
+      const anxietyResponses = [
+        "I hear you're feeling anxious, and that's completely valid. Anxiety can be really challenging. Can you tell me more about what's making you feel this way? Sometimes talking about it can help. 🌿",
+        
+        "It sounds like you're experiencing some anxiety right now. That's okay - many people go through this. What specific situation or thought is triggering these feelings? Understanding the source can be the first step toward managing it.",
+        
+        "I understand that anxiety can feel overwhelming. You're not alone in this. Let me share some techniques that might help:\n\n🧘 **Quick Calming Techniques:**\n• Try the 4-7-8 breathing method: Breathe in for 4 counts, hold for 7, exhale for 8. Repeat 3-4 times.\n• Ground yourself: Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste.\n• Progressive muscle relaxation: Tense and release each muscle group.\n\nWhat's been helping you cope so far?",
+        
+        "Anxiety can be really tough to deal with. I'm here to listen. Sometimes just acknowledging the feeling can help. What would make you feel more supported right now?",
+        
+        "I sense you're dealing with anxiety. Remember, it's a normal human response, even though it doesn't feel good. Have you tried any breathing exercises or mindfulness techniques before? I can guide you through some if you'd like."
+      ];
+      newContext.topic = 'anxiety';
+      setConversationContext(newContext);
+      return anxietyResponses[Math.floor(Math.random() * anxietyResponses.length)];
     }
     
-    // Depression responses
-    if (lowerMessage.includes('depression') || lowerMessage.includes('depressed') || lowerMessage.includes('sad') || lowerMessage.includes('down') || lowerMessage.includes('hopeless')) {
-      return "I'm sorry you're feeling this way. Remember that it's okay to not be okay. Here's what might help:\n\n☀️ **Daily Support:**\n• Try to maintain a routine, even small tasks\n• Get 10-15 minutes of sunlight daily\n• Connect with someone you trust\n• Engage in activities that used to bring joy\n\n🧠 **Mental Health Support:**\n• Practice gratitude journaling\n• Challenge negative thoughts with evidence\n• Set small, achievable goals\n• Consider therapy or counseling\n\n💊 **Natural Support:**\n• Vitamin D supplements (if deficient)\n• Omega-3 fatty acids\n• Regular exercise releases endorphins\n• St. John's Wort (consult doctor first)\n\n🆘 **Crisis Resources:**\n• National Suicide Prevention Lifeline: 988\n• Crisis Text Line: Text HOME to 741741\n\nRemember: You are not alone, and seeking help is a sign of strength.";
+    // Depression responses - More conversational
+    if (lowerMessage.match(/\b(depression|depressed|sad|down|hopeless|empty|numb|worthless)\b/)) {
+      const depressionResponses = [
+        "I'm really sorry you're going through this. Depression can make everything feel heavy and overwhelming. You're not alone in this, and it's okay to not be okay. Can you tell me what's been weighing on you lately?",
+        
+        "It sounds like you're experiencing some really difficult feelings right now. Depression is more than just sadness - it can affect everything. What's one small thing that used to bring you even a little bit of joy? Sometimes reconnecting with those things, even briefly, can help.",
+        
+        "I hear you, and I want you to know that these feelings, as intense as they are, don't define you. Depression lies to us sometimes. Have you been able to maintain any routines lately, even small ones like getting out of bed or having a meal?",
+        
+        "Thank you for sharing this with me. It takes courage to talk about depression. Remember, seeking help is a sign of strength, not weakness. Have you considered talking to a therapist or counselor? There are also crisis resources available 24/7 if you need immediate support.",
+        
+        "I can sense you're really struggling right now. Depression can make it hard to see hope, but it's there. What's one thing - even something tiny - that you're proud of yourself for doing recently?"
+      ];
+      newContext.topic = 'depression';
+      setConversationContext(newContext);
+      return depressionResponses[Math.floor(Math.random() * depressionResponses.length)];
     }
     
-    // Stress responses
-    if (lowerMessage.includes('stress') || lowerMessage.includes('stressed') || lowerMessage.includes('overwhelmed') || lowerMessage.includes('pressure')) {
-      return "Stress can feel overwhelming, but there are effective ways to manage it:\n\n🧘 **Immediate Relief:**\n• Box breathing: Inhale 4, hold 4, exhale 4, hold 4\n• Take a 5-minute break to stretch or walk\n• Practice the STOP technique: Stop, Take a breath, Observe, Proceed\n\n📋 **Organization Tips:**\n• Break large tasks into smaller steps\n• Use a planner or to-do list\n• Prioritize tasks by urgency and importance\n• Learn to say 'no' when needed\n\n🌿 **Stress Management:**\n• Regular exercise (yoga, walking, dancing)\n• Mindfulness meditation or deep breathing\n• Adequate sleep (7-9 hours)\n• Healthy nutrition and hydration\n\n💊 **Natural Stress Relief:**\n• Ashwagandha supplements\n• Green tea (contains L-theanine)\n• Magnesium supplements\n• Chamomile or passionflower tea\n\nRemember: Chronic stress can impact health, so consider professional support if needed.";
+    // Stress responses - More conversational
+    if (lowerMessage.match(/\b(stress|stressed|stressing|overwhelmed|pressure|pressured|burnout|burned out|exhausted|too much)\b/)) {
+      const stressResponses = [
+        "I can hear that you're feeling really stressed right now. That's completely understandable - stress can build up and feel overwhelming. What's the main thing that's causing you stress at the moment?",
+        
+        "It sounds like you're dealing with a lot of pressure. Stress is your body's way of responding to demands, but when it's constant, it can really take a toll. Have you noticed any physical symptoms, like tension in your shoulders or trouble sleeping?",
+        
+        "Stress can feel like you're carrying the weight of the world on your shoulders. You're not alone in feeling this way. What helps you unwind when you're stressed? Sometimes even small breaks can make a big difference.",
+        
+        "I understand that stress can be really challenging. When everything feels like too much, it's important to remember that you don't have to handle it all at once. Can you identify one thing you could do right now to give yourself a moment of relief?",
+        
+        "It sounds like you're overwhelmed, and that's a valid feeling. Stress management isn't about eliminating stress completely - it's about finding healthy ways to cope. What's one small step you could take today to reduce some of that pressure?"
+      ];
+      newContext.topic = 'stress';
+      setConversationContext(newContext);
+      return stressResponses[Math.floor(Math.random() * stressResponses.length)];
     }
     
-    // Sleep issues
-    if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('tired') || lowerMessage.includes('exhausted')) {
-      return "Sleep is crucial for mental health. Here are some strategies to improve your sleep:\n\n😴 **Sleep Hygiene:**\n• Maintain consistent sleep and wake times\n• Keep bedroom cool, dark, and quiet\n• Avoid screens 1 hour before bed\n• Create a relaxing bedtime routine\n\n🌙 **Natural Sleep Aids:**\n• Melatonin supplements (start with 0.5-1mg)\n• Magnesium glycinate before bed\n• Valerian root tea or supplements\n• Lavender essential oil or pillow spray\n\n🧠 **Mental Preparation:**\n• Write down worries in a journal\n• Practice relaxation techniques\n• Avoid caffeine after 2 PM\n• Limit alcohol consumption\n\n💊 **When to Consider:**\n• Prescription sleep aids (consult doctor)\n• Cognitive Behavioral Therapy for Insomnia (CBT-I)\n• Sleep study if sleep apnea is suspected\n\nRemember: Consistent good sleep improves mood, focus, and overall well-being.";
+    // Sleep issues - More conversational
+    if (lowerMessage.match(/\b(sleep|sleeping|insomnia|tired|exhausted|can't sleep|wake up|restless|sleepless)\b/)) {
+      const sleepResponses = [
+        "Sleep issues can really impact how you feel during the day. I'm sorry you're struggling with this. How long has this been going on? Are you having trouble falling asleep, staying asleep, or both?",
+        
+        "It sounds like you're having trouble with sleep. That can make everything else feel harder. What does your bedtime routine look like? Sometimes small changes to your evening routine can make a big difference.",
+        
+        "Sleep problems can be really frustrating, especially when you're tired but can't seem to get the rest you need. Have you noticed if there are specific thoughts or worries that keep you up at night?",
+        
+        "I hear you're struggling with sleep. Poor sleep can affect your mood, energy, and overall well-being. What have you tried so far to improve your sleep? Sometimes it helps to track what works and what doesn't.",
+        
+        "Sleep is so important for mental health, and I know how frustrating it can be when you're not getting enough. Are you finding that your mind races when you try to sleep, or is it more about physical restlessness?"
+      ];
+      newContext.topic = 'sleep';
+      setConversationContext(newContext);
+      return sleepResponses[Math.floor(Math.random() * sleepResponses.length)];
     }
     
-    // Anger/Irritability
-    if (lowerMessage.includes('anger') || lowerMessage.includes('angry') || lowerMessage.includes('irritated') || lowerMessage.includes('frustrated') || lowerMessage.includes('mad')) {
-      return "Feeling angry or irritable is a normal emotion. Here's how to manage it constructively:\n\n🧘 **Immediate Techniques:**\n• Take deep breaths and count to 10\n• Remove yourself from the situation temporarily\n• Use 'I' statements to express feelings\n• Practice the STOP technique\n\n🌱 **Long-term Management:**\n• Regular exercise to release tension\n• Practice mindfulness and meditation\n• Identify triggers and warning signs\n• Develop healthy communication skills\n\n💊 **Natural Support:**\n• Passionflower supplements\n• Regular exercise releases endorphins\n• Adequate sleep and nutrition\n• Avoid excessive caffeine and alcohol\n\n🆘 **When to Seek Help:**\nIf anger leads to aggression or affects relationships, consider anger management therapy or counseling.";
+    // Anger/Irritability - More conversational
+    if (lowerMessage.match(/\b(anger|angry|irritated|irritation|frustrated|frustration|mad|furious|rage|annoyed)\b/)) {
+      const angerResponses = [
+        "I hear that you're feeling angry or frustrated right now. Those are completely valid emotions. Can you tell me what's triggering these feelings? Sometimes understanding the source helps us respond more effectively.",
+        
+        "It sounds like you're dealing with some strong emotions right now. Anger is a normal human response, but it can be challenging to manage. What's the situation that's making you feel this way?",
+        
+        "I understand that you're feeling angry or irritated. These feelings can be really intense. Have you noticed any physical sensations when you feel this way, like tension or a racing heart?",
+        
+        "Anger can be really difficult to deal with, especially when it feels overwhelming. You're not alone in experiencing this. What helps you calm down when you're feeling angry? Sometimes having strategies ready can make a difference.",
+        
+        "I hear you're feeling frustrated or angry. That's okay - emotions are information. What would help you feel better right now? Sometimes taking a moment to breathe or step away can help."
+      ];
+      newContext.topic = 'anger';
+      setConversationContext(newContext);
+      return angerResponses[Math.floor(Math.random() * angerResponses.length)];
     }
     
-    // Loneliness/Social support
-    if (lowerMessage.includes('lonely') || lowerMessage.includes('alone') || lowerMessage.includes('isolated') || lowerMessage.includes('loneliness')) {
-      return "Feeling lonely can be really tough. Here are ways to build connection:\n\n🤝 **Building Connections:**\n• Reach out to family or friends, even with a simple text\n• Join clubs, groups, or classes that interest you\n• Volunteer for causes you care about\n• Consider online communities with shared interests\n\n💬 **Social Skills:**\n• Practice active listening\n• Share your own experiences and feelings\n• Be patient with yourself and others\n• Start with small social interactions\n\n🌱 **Self-Care:**\n• Practice self-compassion\n• Engage in activities you enjoy\n• Consider getting a pet if appropriate\n• Maintain a routine that includes social time\n\n🆘 **Professional Support:**\n• Group therapy can provide connection\n• Individual therapy to address underlying issues\n• Support groups for specific challenges\n\nRemember: It's okay to feel lonely, and reaching out for connection is a brave step.";
+    // Loneliness/Social support - More conversational
+    if (lowerMessage.match(/\b(lonely|loneliness|alone|isolated|isolation|no friends|no one|disconnected)\b/)) {
+      const lonelinessResponses = [
+        "I hear that you're feeling lonely, and that can be really tough. Loneliness is more than just being alone - it's about feeling disconnected. Can you tell me more about what's making you feel this way?",
+        
+        "Feeling lonely can be really painful, and I'm sorry you're experiencing that. You're not alone in feeling this way. What kind of connection are you looking for right now? Sometimes understanding what we need helps us find it.",
+        
+        "I understand that loneliness can be really challenging. It's okay to feel this way, and reaching out - even to me - is a step in the right direction. What would help you feel more connected?",
+        
+        "Loneliness is a difficult feeling to navigate. Thank you for sharing this with me. Have you been able to reach out to anyone recently, even just for a brief connection? Sometimes small steps can help.",
+        
+        "I hear you're feeling lonely, and that's really hard. You're taking a brave step by talking about it. What's one small way you could connect with someone today, even if it's just a text or a brief conversation?"
+      ];
+      newContext.topic = 'loneliness';
+      setConversationContext(newContext);
+      return lonelinessResponses[Math.floor(Math.random() * lonelinessResponses.length)];
     }
     
     // Crisis/Urgent help
@@ -136,9 +231,22 @@ const ChatbotPage = () => {
       return "🚨 **CRISIS SUPPORT - You are not alone:**\n\n**Immediate Help:**\n• National Suicide Prevention Lifeline: 988 (24/7)\n• Crisis Text Line: Text HOME to 741741\n• Emergency Services: 911\n• Go to your nearest emergency room\n\n**You Matter:**\n• Your life has value and meaning\n• These feelings are temporary, even when they don't feel that way\n• There are people who care about you\n• Professional help can make a significant difference\n\n**Right Now:**\n• Stay with someone you trust\n• Remove any means of self-harm\n• Remember: This pain is temporary\n• You are stronger than you know\n\nPlease reach out for immediate professional help. You don't have to go through this alone.";
     }
     
-    // Happy/Positive responses
-    if (lowerMessage.includes('happy') || lowerMessage.includes('good') || lowerMessage.includes('great') || lowerMessage.includes('wonderful') || lowerMessage.includes('amazing')) {
-      return "That's wonderful! I'm so glad you're feeling positive today. Celebrating good moments is important for mental health:\n\n✨ **Building on Positivity:**\n• Practice gratitude for these moments\n• Share your joy with someone you care about\n• Take note of what contributed to your good mood\n• Consider journaling about positive experiences\n\n🌱 **Maintaining Well-being:**\n• Continue healthy routines that support your mood\n• Use this energy to tackle tasks or goals\n• Remember these feelings during difficult times\n• Celebrate small wins regularly\n\n💚 **Spreading Joy:**\n• Your positive energy can help others too\n• Consider doing something kind for someone else\n• Share your good mood with the world\n\nKeep up the great work! These positive moments are precious.";
+    // Happy/Positive responses - More conversational
+    if (lowerMessage.match(/\b(happy|good|great|wonderful|amazing|fantastic|excited|grateful|blessed|feeling good|doing well|better)\b/)) {
+      const positiveResponses = [
+        "That's wonderful to hear! I'm so glad you're feeling positive right now. What's contributing to this good mood? Sometimes understanding what helps us feel good can help us recreate those feelings later.",
+        
+        "I love hearing that you're doing well! Celebrating these positive moments is so important for mental health. What's been going well for you lately?",
+        
+        "That's fantastic! It's great that you're experiencing some positive feelings. How can you build on this? Maybe there's something you can do to extend this good feeling?",
+        
+        "I'm really happy to hear you're feeling good! These positive moments are precious. What do you think helped you get to this place? Sometimes recognizing what works can help us maintain it.",
+        
+        "That's amazing! I'm so glad you're having a good day. Remember these feelings - they're important to hold onto during tougher times. Is there something specific that's making you feel this way?"
+      ];
+      newContext.mood = 'positive';
+      setConversationContext(newContext);
+      return positiveResponses[Math.floor(Math.random() * positiveResponses.length)];
     }
     
     // General help and support
@@ -146,13 +254,67 @@ const ChatbotPage = () => {
       return "I'm here to support you! Here are comprehensive mental health resources:\n\n🆘 **Crisis Resources:**\n• National Suicide Prevention Lifeline: 988\n• Crisis Text Line: Text HOME to 741741\n• Emergency: 911\n\n🏥 **Professional Help:**\n• Find therapists: PsychologyToday.com\n• Low-cost therapy: Open Path Collective\n• Online therapy: BetterHelp, Talkspace\n• Your insurance provider's mental health coverage\n\n📚 **Self-Help Resources:**\n• Mindfulness apps: Headspace, Calm\n• Mood tracking: Daylio, Moodpath\n• Books: 'The Anxiety and Phobia Workbook'\n• Podcasts: 'The Mental Health Podcast'\n\n🌱 **Daily Practices:**\n• Regular exercise and outdoor time\n• Healthy sleep and nutrition\n• Mindfulness and meditation\n• Connecting with supportive people\n\nRemember: Seeking help is a sign of strength, not weakness.";
     }
     
-    // Thank you responses
-    if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
-      return "You're very welcome! I'm glad I could help. Remember, taking care of your mental health is one of the most important things you can do. Feel free to reach out anytime you need support. You're doing great! 🌟";
+    // Thank you responses - More varied
+    if (lowerMessage.match(/\b(thank|thanks|thank you|appreciate|grateful)\b/)) {
+      const thankYouResponses = [
+        "You're so welcome! I'm really glad I could help. Remember, I'm here whenever you need to talk. You're doing great, and taking care of your mental health is important. 🌟",
+        
+        "It's my pleasure! I'm here to support you whenever you need it. You're taking important steps for your well-being, and that's something to be proud of. Feel free to come back anytime!",
+        
+        "You're very welcome! I'm happy I could be helpful. Remember, reaching out for support is a sign of strength, not weakness. You're doing great, and I'm always here if you need to talk again.",
+        
+        "I'm so glad I could help! That's what I'm here for. Take care of yourself, and know that you can always come back if you need support. You're doing amazing! 💚",
+        
+        "You're welcome! It means a lot that you reached out. Remember, taking care of your mental health is ongoing work, and you're doing it. I'm here whenever you need me!"
+      ];
+      return thankYouResponses[Math.floor(Math.random() * thankYouResponses.length)];
     }
     
-    // Default response with helpful suggestions
-    return "I'm here to listen and support you. I can help with various mental health concerns including:\n\n• **Anxiety & Panic** - Breathing techniques and coping strategies\n• **Depression & Mood** - Support and natural remedies\n• **Stress Management** - Organization and relaxation tips\n• **Sleep Issues** - Sleep hygiene and natural sleep aids\n• **Anger & Irritability** - Healthy expression techniques\n• **Loneliness** - Building connections and social skills\n• **Crisis Support** - Emergency resources and immediate help\n\nWhat would you like to talk about? I'm here to provide guidance, resources, and support. 💚";
+    // Questions and follow-ups - More conversational
+    if (lowerMessage.match(/\?/)) {
+      const questionResponses = [
+        "That's a great question. I'm here to help you explore that. Can you tell me a bit more about what you're thinking?",
+        
+        "I appreciate you asking. Let me help you think through this. What's your biggest concern about this?",
+        
+        "That's something worth exploring. What made you think about this? Sometimes understanding where a question comes from helps us find better answers.",
+        
+        "I'm glad you're asking. This shows you're thinking about your well-being. What would be most helpful for you to know right now?",
+        
+        "That's a thoughtful question. Let's explore this together. What's been on your mind about this topic?"
+      ];
+      return questionResponses[Math.floor(Math.random() * questionResponses.length)];
+    }
+    
+    // Short responses - More engaging
+    if (messageLength <= 3) {
+      const shortResponses = [
+        "I'm listening. Can you tell me more about that?",
+        
+        "I hear you. What's on your mind?",
+        
+        "I'm here for you. What would you like to talk about?",
+        
+        "Tell me more - I'm here to listen and support you.",
+        
+        "I understand. How are you feeling about this?"
+      ];
+      return shortResponses[Math.floor(Math.random() * shortResponses.length)];
+    }
+    
+    // Default response - More conversational and engaging
+    const defaultResponses = [
+      "I'm here to listen and support you. I can help with various mental health concerns including anxiety, depression, stress, sleep issues, and more. What's on your mind today? 💚",
+      
+      "Thank you for sharing that with me. I'm here to help you navigate whatever you're going through. Can you tell me more about what you're experiencing?",
+      
+      "I hear you. Mental health is complex, and everyone's journey is different. What would be most helpful for you right now? I can provide support, resources, or just listen.",
+      
+      "I'm here to support you. Whether you're dealing with anxiety, stress, mood issues, or just need someone to talk to, I'm listening. What would you like to discuss?",
+      
+      "Thank you for reaching out. I'm here to help you feel better. What's been challenging for you lately? Sometimes talking about it can help."
+    ];
+    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
   };
 
   const formatTime = (timestamp) => {
