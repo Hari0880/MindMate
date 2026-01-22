@@ -31,10 +31,10 @@ const HomePage = () => {
             </div>
           ) : (
             <div className="flex items-center space-x-4">
-              <Link to="/login" className="text-gray-600 hover:text-gray-800 transition-colors">
-                Sign In
+              <Link to="/signup" className="text-gray-600 hover:text-gray-800 transition-colors">
+                Sign Up
               </Link>
-              <Link to="/signup" className="healing-button">
+              <Link to="/login" className="healing-button">
                 Get Started
               </Link>
             </div>
@@ -69,10 +69,10 @@ const HomePage = () => {
             ) : (
               <>
                 <Link to="/login" className="healing-button">
-                  Start Your Journey
+                  Get Started
                 </Link>
                 <Link to="/signup" className="bg-white/80 hover:bg-white text-gray-700 font-medium py-3 px-6 rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-lg">
-                  Create Account
+                  Sign Up
                 </Link>
               </>
             )}

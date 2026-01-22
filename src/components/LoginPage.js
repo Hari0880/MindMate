@@ -293,12 +293,15 @@ const LoginPage = () => {
 
             {/* Sign Up Link */}
             <div className="text-center mt-6">
-              <p className="text-gray-600">
-                Don't have an account?{' '}
-                <Link to="/signup" className="text-healing-600 hover:text-healing-700 font-medium transition-colors">
-                  Sign up here
-                </Link>
+              <p className="text-gray-600 mb-3">
+                Don't have an account?
               </p>
+              <Link 
+                to="/signup" 
+                className="inline-block w-full bg-white/80 hover:bg-white text-gray-700 font-medium py-3 px-6 rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-lg text-center"
+              >
+                Go to Sign Up
+              </Link>
             </div>
           </div>
 

@@ -33,20 +33,71 @@ A beautiful, calming mental health chatbot built with React, Tailwind CSS, and F
 - **Build Tool**: Create React App
 - **Fonts**: Inter (Google Fonts)
 
+## Quick Start 🚀
+
+### For New Users (First Time Setup)
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Hari0880/MindMate.git
+   cd MindMate
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+   This will install all required packages (React, Firebase, Tailwind CSS, etc.)
+
+3. **Configure Firebase** (see detailed instructions below)
+
+4. **Start the development server:**
+   ```bash
+   npm start
+   ```
+
+5. **Open your browser:**
+   - The app will automatically open at `http://localhost:3000`
+   - Or manually navigate to `http://localhost:3000`
+
+### Running on Another Machine
+
+If you're setting up on a different machine:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Hari0880/MindMate.git
+   cd MindMate
+   ```
+
+2. **Install all dependencies:**
+   ```bash
+   npm install
+   ```
+   ⚠️ **Important**: Always run `npm install` after cloning to install all required packages.
+
+3. **Configure Firebase** (use your Firebase credentials in `src/firebase.js`)
+
+4. **Start the server:**
+   ```bash
+   npm start
+   ```
+
 ## Getting Started 🚀
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
-- Firebase project
+- **Node.js** (v14 or higher) - [Download here](https://nodejs.org/)
+- **npm** (comes with Node.js) or **yarn**
+- **Firebase account** - [Create one here](https://firebase.google.com/)
+- **Git** (for cloning) - [Download here](https://git-scm.com/)
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd mental-health-chatbot
+git clone https://github.com/Hari0880/MindMate.git
+cd MindMate
 ```
 
 2. Install dependencies:
@@ -56,9 +107,33 @@ npm install
 
 3. Configure Firebase:
    - Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
-   - Enable Authentication (Email/Password and Google)
-   - Enable Firestore Database
-   - Update `src/firebase.js` with your Firebase config
+   - Enable **Authentication**:
+     - Go to Authentication > Sign-in method
+     - Enable **Email/Password** provider
+     - Enable **Google** provider (optional but recommended)
+   - Enable **Firestore Database**:
+     - Go to Firestore Database
+     - Click "Create database"
+     - Start in **test mode** (for development)
+   - Get your Firebase config:
+     - Go to Project Settings > General
+     - Scroll down to "Your apps" section
+     - Click the web icon (`</>`) to add a web app
+     - Copy the Firebase configuration object
+   - Update `src/firebase.js` with your Firebase config:
+     ```javascript
+     const firebaseConfig = {
+       apiKey: "your-api-key",
+       authDomain: "your-project.firebaseapp.com",
+       projectId: "your-project-id",
+       storageBucket: "your-project.appspot.com",
+       messagingSenderId: "your-sender-id",
+       appId: "your-app-id",
+       measurementId: "your-measurement-id"
+     };
+     ```
+
+   **Note**: The project comes with a pre-configured Firebase setup. For production, replace with your own Firebase credentials.
 
 4. Start the development server:
 ```bash
